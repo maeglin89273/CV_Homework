@@ -35,10 +35,10 @@ def erosion(binary_img, structure_element=disc_se):
 
 
 def opening(binary_img, structure_element=disc_se):
-    dilation(erosion(binary_img,structure_element), structure_element)
+    return dilation(erosion(binary_img,structure_element), structure_element)
 
 def closing(binary_img, structure_element=disc_se):
-    erosion(dilation(binary_img, structure_element), structure_element)
+    return erosion(dilation(binary_img, structure_element), structure_element)
 
 def hit_and_miss_transform(binary_img, j, k):
     return intersection(erosion(binary_img, j), erosion(complement(binary_img), k))
@@ -86,6 +86,20 @@ def threshold(image, t=128):
 if __name__ == '__main__':
     lena = misc.imread('lena.bmp')
     thresholded_lena = threshold(lena)
-    dilated_lena = erosion(thresholded_lena)
 
-    misc.imsave('dilated.jpg', dilated_lena)
+    dilated_lena = dilation(thresholded_lena)
+    misc.imsave('dilated.png', dilated_lena)
+
+    erosed_lena = erosion(thresholded_lena)
+    misc.imsave('erosed.png', erosed_lena)
+
+    opened_lena = opening(thresholded_lena)
+    misc.imsave('opened.png', opened_lena)
+
+    closed_lena = closing(thresholded_lena)
+    misc.imsave('closed.png', closed_lena)
+
+    j = np.array([[False, False, False], [True, True, False], [False, True, False]], dtype=np.bool)
+    k = np.array([[False, True, True], [False, False, True], [False, False, False]], dtype=np.bool)
+    ham_lena = hit_and_miss_transform(thresholded_lena, j, k)
+    misc.imsave('hit_and_miss.png', ham_lena)
