@@ -48,7 +48,7 @@ def histogram(image):
     plt.savefig('histogram.jpg')
     return statistic
 
-def connected_components(thresholded_image, connectivity=8):
+def connected_components(thresholded_image, connectivity=4):
     image = thresholded_image.astype('int32')
     new_label = 1
     forward_neighbor_labels = forward_neighbor_4_labels if connectivity == 4 else forward_neighbor_8_labels
