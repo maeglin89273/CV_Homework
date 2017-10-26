@@ -40,8 +40,22 @@ def opening(binary_img, structure_element=disc_se):
 def closing(binary_img, structure_element=disc_se):
     erosion(dilation(binary_img, structure_element), structure_element)
 
-def hit_and_miss_transform(binary_img, structure_element=disc_se):
-    pass
+def hit_and_miss_transform(binary_img, j, k):
+    return intersection(erosion(binary_img, j), erosion(complement(binary_img), k))
+
+def complement(binary_img):
+    comp = np.zeros_like(binary_img, np.uint8)
+    for y in range(binary_img.shape[0]):
+        for x in range(binary_img.shape[1]):
+            comp[y, x] = 255 - binary_img[y, x]
+    return comp
+
+def intersection(img1, img2):
+    intersect = np.zeros_like(img1, np.uint8)
+    for y in range(img1.shape[0]):
+        for x in range(img1.shape[1]):
+            intersect[y, x] = 255 if img1[y, x] and img2[y, x] else 0
+    return intersect
 
 def erosion_check(binary_img, y, x, structure_element, cent_y, cent_x):
     for sy in range(structure_element.shape[0]):
